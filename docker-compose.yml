@@ -1,0 +1,71 @@
+version: "3.8"
+
+services:
+
+  db:
+    image: postgres
+    container_name: db
+    hostname: dbhost
+    #    secrets:
+    #      - db-password
+    networks:
+      - backnet
+    ports:
+      - '5432:5432'
+    volumes:
+      - /Users/sshussai/etc/pData:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB} -t 1" ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 10s
+
+
+  web:
+    image: bookreview:latest
+    container_name: web
+    hostname: webhost
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # flask requires SIGINT to stop gracefully
+    # (default stop signal from Compose is SIGTERM)
+    stop_signal: SIGINT
+    networks:
+      - backnet
+      - frontnet
+    ports:
+      - '5000:5000'
+      - '8080:8080'
+    environment:
+      - APP_SETTINGS=pdqs.config.Config
+      - SECRET_KEY=postgres
+      #  Format of database url: "postgresql://{user}:{pass}@{host}:{port}/{database}"
+      - DATABASE_URL=postgresql://postgres:postgres@dbhost:5432/postgres
+    depends_on:
+      db:
+        condition: service_healthy
+    command: gunicorn -w 3 -t 60 -b 0.0.0.0:5000 --log-level=debug pdqs.app:app
+
+  proxy:
+    build: proxy
+    restart: always
+    ports:
+      - '80:80'
+    depends_on:
+      - web
+    networks:
+      - frontnet
+
+secrets:
+  db-password:
+    file: password.txt
+
+networks:
+  backnet:
+  frontnet:
