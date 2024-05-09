@@ -1,7 +1,7 @@
 import logging
 import os
 from logging.config import dictConfig
-from typing import Any
+# from typing import Any
 
 from flask import Flask, request, jsonify, Response, redirect, url_for
 # from flask.logging import default_handler
@@ -49,13 +49,14 @@ review_crud: CRUD = RawCrud(db)
 
 
 @app.route('/', methods=['GET'])
-def index() -> Response:
-    redirect(url_for('index'))
-
-
-@app.route('/index', methods=['GET'])
-def landing() -> Response:
+def home() -> Response:
     return jsonify(GreetingModel(greeting="Hello World!").dict())
+    # return redirect(url_for('index'))
+
+
+# @app.route('/index', methods=['GET'])
+# def index() -> Response:
+#     return jsonify(GreetingModel(greeting="Hello World!").dict())
 
 
 @app.route('/authors', methods=['GET'])
