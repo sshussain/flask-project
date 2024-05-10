@@ -1,13 +1,11 @@
 import logging
 import os
-from logging.config import dictConfig
-# from typing import Any
+from datetime import datetime as dt
 
 from flask import Flask, request, jsonify, Response, redirect, url_for
-# from flask.logging import default_handler
 from flask_sqlalchemy import SQLAlchemy
 
-from pdqs.models import GreetingModel, AuthorResponseModel, BookResponseModel, ReviewResponseModel, CountModel
+from pdqs.models import GreetingModel, AuthorResponseModel, BookResponseModel, CountModel
 
 app = Flask(__name__)
 
@@ -17,32 +15,17 @@ app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-logging.config.dictConfig({
-    'version': 1,
-    'formatters': {'default': {
-        'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
-    }},
-    'handlers': {'wsgi': {
-        'class': 'logging.StreamHandler',
-        'stream': 'ext://flask.logging.wsgi_errors_stream',
-        'formatter': 'default'
-    }},
-    'root': {
-        'level': 'INFO',
-        'handlers': ['wsgi']
-    }
-})
-gunicorn_logger = logging.getLogger('gunicorn.debug')
-app.logger.handlers = gunicorn_logger.handlers
-app.logger.setLevel(gunicorn_logger.level)
-
+logging.basicConfig(filename='logfile',
+                    filemode='a',
+                    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                    datefmt='%H:%M:%S',
+                    level=logging.DEBUG)
 db = SQLAlchemy(app)
 
 """ NOTE
 The import should be here to prevent cyclic dependencies. A better solution is to write a CRUD interface that
 manages database.
 """
-from pdqs import database
 from pdqs.crud import CRUD, RawCrud
 
 review_crud: CRUD = RawCrud(db)
@@ -50,13 +33,15 @@ review_crud: CRUD = RawCrud(db)
 
 @app.route('/', methods=['GET'])
 def home() -> Response:
-    return jsonify(GreetingModel(greeting="Hello World!").dict())
-    # return redirect(url_for('index'))
+    # return jsonify(GreetingModel(greeting="Hello World!").dict())
+    return redirect(url_for('index'))
 
 
-# @app.route('/index', methods=['GET'])
-# def index() -> Response:
-#     return jsonify(GreetingModel(greeting="Hello World!").dict())
+@app.route('/index', methods=['GET'])
+def index() -> Response:
+    logging.info(request.headers)
+    utc_now = dt.utcnow()
+    return jsonify(GreetingModel(time=utc_now, greeting="Hello World!").dict())
 
 
 @app.route('/authors', methods=['GET'])

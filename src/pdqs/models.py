@@ -1,9 +1,11 @@
+from datetime import datetime
 from typing import List, Dict
 
 import pydantic
 
 
 class GreetingModel(pydantic.BaseModel):
+    time: datetime.datetime
     greeting: str
 
 
