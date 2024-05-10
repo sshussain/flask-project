@@ -5,7 +5,7 @@ import pydantic
 
 
 class GreetingModel(pydantic.BaseModel):
-    time: datetime.datetime
+    time: datetime
     greeting: str
 
 

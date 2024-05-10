@@ -4,10 +4,18 @@ from datetime import datetime as dt
 
 from flask import Flask, request, jsonify, Response, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+import flask_cors
 
 from pdqs.models import GreetingModel, AuthorResponseModel, BookResponseModel, CountModel
 
+logging.basicConfig(filename='logfile',
+                    filemode='a',
+                    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                    datefmt='%H:%M:%S',
+                    level=logging.DEBUG)
+
 app = Flask(__name__)
+flask_cors.CORS(app)
 
 # Example of loading from a yaml file
 # data = yaml_loader.yaml("/Users/pjose/Project/dev_maintenance/backend/config.yaml")
@@ -15,11 +23,6 @@ app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-logging.basicConfig(filename='logfile',
-                    filemode='a',
-                    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-                    datefmt='%H:%M:%S',
-                    level=logging.DEBUG)
 db = SQLAlchemy(app)
 
 """ NOTE
@@ -155,5 +158,12 @@ def get_reviews_for_book(book_name: str) -> Response:
     return jsonify(reviews)
 
 
+# @app.teardown_appcontext
+# def shutdown_session(exception=None):
+#     from pdqs.entities.entity import session
+#     session.remove()
+
+
 if __name__ == '__main__':
     app.run(debug=True)
+
