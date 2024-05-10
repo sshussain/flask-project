@@ -2,7 +2,8 @@ FROM python:3.10.14-bookworm
 
 LABEL authors="Suheel Hussain"
 
-RUN apt-get -q -y update
+RUN apt-get -q -y update \
+    && apt-get install net-tools
 
 WORKDIR = /app
 
@@ -32,8 +33,6 @@ RUN chmod +x service_entrypoint.sh
 
 ENV FLASK_APP=pdqs/app.py
 
-#RUN flask db init
-
 CMD ["flask", "run", "--host", "0.0.0.0"]
-#ENTRYPOINT [ "./service_entrypoint.sh" ]
+
 
