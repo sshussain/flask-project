@@ -23,7 +23,8 @@
 - [ ] Refactor to use consistent names in JSON request and response
 - [ ] Allow multiple authors for a book
 - [ ] Database Tasks
-  - [ ] Add init-db to create and update schemas. See [Define and Access the Database](https://flask.palletsprojects.com/en/2.3.x/tutorial/database/)
+  - [x] Add init-db to create and update schemas. See [Define and Access the Database](https://flask.palletsprojects.com/en/2.3.x/tutorial/database/)
   - [ ] Remove all tables
-  - [ ] Use init-db to create schema and tables
+  - [x] Use init-db to create schema and tables
 - [ ] FIX: Flask redirects to Mac's local address -- Flask does not redirect through Nginx
+

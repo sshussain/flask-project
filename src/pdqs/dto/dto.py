@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import List, Dict
 
 import pydantic
 
@@ -10,7 +10,7 @@ class GreetingDto(pydantic.BaseModel):
 
 
 class AuthorResponseDto(pydantic.BaseModel):
-    names: List[str]
+    name: List[str]
 
 
 class AuthorCreateDto(pydantic.BaseModel):
@@ -18,8 +18,8 @@ class AuthorCreateDto(pydantic.BaseModel):
 
 
 class BookResponseDto(pydantic.BaseModel):
-    titles: List[str]
-    # books: List[Dict[str, str]]
+    # title: List[str]
+    book: List[Dict[str, str]]
 
 
 class ReviewResponseDto(pydantic.BaseModel):
