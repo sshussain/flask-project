@@ -7,6 +7,7 @@ import flask_cors
 
 import pdqs.repo
 from pdqs.dto.dto import GreetingDto, AuthorResponseDto, BookResponseDto, CountDto
+from pdqs.user_admin import user_admin
 
 logging.basicConfig(filename='logfile',
                     filemode='a',
@@ -19,6 +20,8 @@ flask_cors.CORS(app)
 
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+app.register_blueprint(user_admin, url_prefix='/user')
 
 from pdqs.repo import engine, BookReviewCrud
 pdqs.repo.init_db()
