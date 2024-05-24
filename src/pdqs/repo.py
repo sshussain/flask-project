@@ -1,19 +1,33 @@
 import csv
+from datetime import datetime
 from typing import List, Dict
 
 # Database URL format
 # dialect+driver://username:password@host:port/database
 # driver is optional. If not specified, the default driver for Postgres is psycopg2
-from sqlalchemy import create_engine, String, ForeignKey, select, Engine
+from sqlalchemy import create_engine, String, ForeignKey, select, Engine, DateTime
 from sqlalchemy.orm import Session, relationship, DeclarativeBase, Mapped, mapped_column
 
-# DATABASE_URL = "postgresql://postgres:postgres@dbhost:5432/postgres"
-DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/postgres"
+DATABASE_URL = "postgresql://postgres:postgres@dbhost:5432/postgres"
+# DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/postgres"
 engine = create_engine(DATABASE_URL)  # , echo=True)
 
 
 class Base(DeclarativeBase):
     ...
+
+
+# TODO Use this as a common entity to auto inject create and update dates
+class Entity:
+    id: Mapped[int] = mapped_column(primary_key=True)
+    created_at: Mapped[DateTime] = mapped_column(DateTime)
+    updated_at: Mapped[DateTime] = mapped_column(DateTime)
+    last_updated_by: Mapped[DateTime] = mapped_column(DateTime)
+
+    def __init__(self, created_by):
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
+        self.last_updated_by = created_by
 
 
 class Author(Base):
