@@ -1,0 +1,12 @@
+Flask==3.0.3
+Flask-Migrate==2.7.0
+Flask-Script==2.0.6
+flask-cors
+pydantic==2.7.1
+psycopg2-binary==2.9.9
+pydantic_core==2.18.2
+requests==2.31.0
+SQLAlchemy~=2.0.30
+urllib3==2.2.1
+Werkzeug==3.0.2
+gunicorn
