@@ -84,6 +84,16 @@ class BookGenreAssociation(Base):
         return f"BookGenreAssociation(book_id={self.book_id!r}, {self.genre_id!r})"
 
 
+class UserCreds(Base):
+    __tablename__ = "user_creds"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(100))
+    password: Mapped[str] = mapped_column(String(32))
+
+    def __repr__(self):
+        return f"UserCreds(id={self.id!r}, name={self.name!r}, password={self.password!r})"
+
+
 def init_db():
     Base.metadata.create_all(engine)
 
