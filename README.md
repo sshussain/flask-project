@@ -19,7 +19,7 @@
 - [x] Use Flask-SqlAlchemy. See [Flask SQL Alchemy](https://flask-sqlalchemy.palletsprojects.com/en/3.1.x/)
   - [x] Create entities
   - [x] Methods to query tables
-- [ ] Use HTTPS: configure nginx to terminate SSL. The self-signed cert is available at ~/etc/certs
+- [x] Use HTTPS: configure nginx to terminate SSL. The self-signed cert is available at ~/etc/certs
 - [ ] Use docker-compose secrets for passwords and other sensitive data. See [Docker Secrets](https://docs.docker.com/compose/use-secrets/)
 - [ ] Refactor to use consistent names in JSON request and response
 - [ ] Allow multiple authors for a book

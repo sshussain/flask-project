@@ -27,6 +27,11 @@ from pdqs.repo import engine, BookReviewCrud
 pdqs.repo.init_db()
 crud = BookReviewCrud(engine)
 
+@app.route("/alive")
+def get_system_status() -> Response:
+    return "I am alive", 200
+
+
 @app.route('/', methods=['GET'])
 def home() -> Response:
     return redirect(url_for('index'))
